@@ -1,0 +1,61 @@
+import folium
+import json
+from shapely.geometry import shape, Point
+from bs4 import BeautifulSoup
+from folium.plugins import LocateControl, MarkerCluster
+
+
+# Create the map
+MyMap = folium.Map(location=[43.8765, 5.3954], tiles='OpenStreetMap', zoom_start=10, max_zoom=19, control_scale=True)
+
+# Define border line and shading style
+border_style = {'color': '#000000', 'weight': '1.5', 'fillColor': '#58b5d1', 'fillOpacity': 0.08}
+
+# Create custom  icon for map markers
+house_img = '/content/Red house icon.png'
+
+# Save the map
+MyMap.save('MyMap.html')
+
+houses = {'Maison salle yoga': [(44.0834, 4.9715), 'https://www.pierrestradition.fr/2776-provence-luberon-ancienne-bergerie-renovee-dans-un-parc-arbore-de-10-ha-avec-vue.html'],
+                'Villa avec terrasse et vue sur Apt': [(43.8765, 5.3954), 'https://proprietes.lefigaro.fr/annonces/villa-vaucluse-provence+alpes+cote+d+azur-france/45398746/?prix_max=950000.0'],
+                'Mas Gordes': [(43.9113, 5.2002), 'https://proprietes.lefigaro.fr/annonces/mas-vaucluse-provence+alpes+cote+d+azur-france/37490643/?prix_max=950000.0'],
+                'Corps de ferme avec super vue': [(46.5136, -84.3358), 'https://proprietes.lefigaro.fr/annonces/ferme-vaucluse-provence+alpes+cote+d+azur-france/36070419/?prix_max=950000.0'],
+                'Maison avec le coin avec la super vue que Papa a aimé' : [(43.8770, 5.3940), 'https://www.pierrestradition.fr/2622-provence-veritable-pepite-du-luberon-mas-ancien-avec-piscine-et-vue.html'],
+                'Maison avec les giraffes dans le jardin' : [(44.0840, 4.9725), 'https://proprietes.lefigaro.fr/annonces/maison-vaucluse-provence+alpes+cote+d+azur-france/39836725/?prix_max=950000.0'],
+                'Jaccepte que la piscine est moche mais le reste est assez beau et ya une vue sur les monts' : [(44.0677, 5.1838), 'https://proprietes.lefigaro.fr/annonces/maison-vaucluse-provence+alpes+cote+d+azur-france/45638730/?prix_max=950000.0'],
+                'Cest à Forcalquier mais ya une belle vue' : [(43.9599, 5.7807), 'https://proprietes.lefigaro.fr/annonces/maison-alpes+de+haute+provence-provence+alpes+cote+d+azur-france/39061041/?prix_max=950000.0'],
+                'Maison avec jolies cheminées' : [(33.7879, -117.8531), 'https://proprietes.lefigaro.fr/annonces/propriete-vaucluse-provence+alpes+cote+d+azur-france/45371612/?prix_max=950000.0'],
+                'Cest un mas' : [(44.2451, 4.8862), 'https://www.bellesdemeures.com/annonces/vente/tt-2-tb-2-pl-36148/189594243/?idtt=2&pl=345%2c350&tri=prixdecroissant&pxmax=950000&surf_terrainmin=2000&nb_chambresmin=3&m=search_to_detail'],
+                'Mas impeccablement rénové à la limite de Apt' : [(43.8785, 5.3955), 'https://www.bellesdemeures.com/annonces/vente/tt-2-tb-2-pl-46175/182061153/?idtt=2&pl=345%2c350&tri=prixdecroissant&pxmax=950000&surf_terrainmin=2000&nb_chambresmin=3&page=4&m=search_to_detail']}
+
+# Create markers for each pub in the pub dictionary
+for house, details in houses.items():
+    # Define marker variables
+    name = house
+    coordinates = details[0]
+    website = details[1]
+
+    # Create custom icon with beer glass image
+    custom_icon = folium.CustomIcon(house_img, icon_size=(25, 25), popup_anchor=(0, -22))
+    # Define html inside marker pop-up
+    house_html = folium.Html(f"""<p style="text-align: center;"><span style="font-family: Didot, serif; font-size: 21px;">{name}</span></p>
+    <p style="text-align: center;"><a href={website} target="_blank" title="{name} website"><span style="font-family: Didot, serif; font-size: 17px;">{name} Website</span></a></p>
+    <p style="text-align: center;"></p>""", script=True)
+    # Create pop-up with html content
+    popup = folium.Popup(house_html, max_width=700)
+    # Create marker with custom icon and pop-up.
+    custom_marker = folium.Marker(location=coordinates, icon=custom_icon, tooltip=name, popup=popup)
+    
+    #add marker to map
+    custom_marker.add_to(MyMap)
+
+# Enable geolocation button on map.
+LocateControl(auto_start=False).add_to(MyMap)
+
+# Define webpage title html and add to script.
+tab_title = """<title>Annonces Propriétés Lubéron</title>"""
+MyMap.get_root().html.add_child(folium.Element(tab_title))
+
+# Save map to HTML
+MyMap.save('Map.html')
