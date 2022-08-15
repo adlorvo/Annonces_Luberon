@@ -15,7 +15,7 @@ border_style = {'color': '#000000', 'weight': '1.5', 'fillColor': '#58b5d1', 'fi
 house_img = 'Red House Icon.png'
 
 # Save the map
-MyMap.save('MyMap.html')
+MyMap.save('index.html')
 
 houses = {'Maison salle yoga': [(44.0834, 4.9715), 'https://www.pierrestradition.fr/2776-provence-luberon-ancienne-bergerie-renovee-dans-un-parc-arbore-de-10-ha-avec-vue.html'],
                 'Villa avec terrasse et vue sur Apt': [(43.8765, 5.3954), 'https://proprietes.lefigaro.fr/annonces/villa-vaucluse-provence+alpes+cote+d+azur-france/45398746/?prix_max=950000.0'],
@@ -58,4 +58,4 @@ tab_title = """<title>Annonces Propriétés Lubéron</title>"""
 MyMap.get_root().html.add_child(folium.Element(tab_title))
 
 # Save map to HTML
-MyMap.save('Map.html')
+MyMap.save('index.html')
