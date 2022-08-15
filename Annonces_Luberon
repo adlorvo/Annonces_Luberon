@@ -12,7 +12,7 @@ MyMap = folium.Map(location=[43.8765, 5.3954], tiles='OpenStreetMap', zoom_start
 border_style = {'color': '#000000', 'weight': '1.5', 'fillColor': '#58b5d1', 'fillOpacity': 0.08}
 
 # Create custom  icon for map markers
-house_img = '/content/Red house icon.png'
+house_img = 'Red House Icon.png'
 
 # Save the map
 MyMap.save('MyMap.html')
